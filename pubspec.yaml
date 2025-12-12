@@ -1,0 +1,23 @@
+name: stream_feeds_flutter_tutorial
+description: "Flutter tutorial for Stream Feeds"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  image_picker: ^1.2.1
+  flutter:
+    sdk: flutter
+  flutter_state_notifier: ^1.0.0
+  stream_feeds: 
+    path: ../stream-feeds-flutter/packages/stream_feeds
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
