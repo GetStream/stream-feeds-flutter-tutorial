@@ -63,7 +63,6 @@ class _ActivityComposerState extends State<ActivityComposer> {
                 },
                 icon: Icon(Icons.image_outlined),
               ),
-              if (_attachment != null) SizedBox(width: 8),
               SizedBox(width: 8),
               ElevatedButton(
                 onPressed: _hasText && !_isSending ? _createActivity : null,

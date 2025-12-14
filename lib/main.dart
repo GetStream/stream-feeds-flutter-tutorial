@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stream_feeds/stream_feeds.dart';
+import 'package:stream_feeds_flutter_tutorial/activity_composer.dart';
 
 import 'activity_list_view.dart';
-import 'home_page.dart';
 
 const String apiKey = 'REPLACE_WITH_API_KEY';
 const String userId = 'REPLACE_WITH_USER_ID';
@@ -93,12 +93,18 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(title: Text('Stream Feeds Tutorial')),
       body: _index == 0
-          ? HomePage(
-              client: client,
-              userFeed: userFeed,
-              timelineFeed: timelineFeed,
-              onFollow: onFollow,
-              onUnfollow: onUnfollow,
+          ? Column(
+              children: [
+                ActivityComposer(userFeed: userFeed),
+                Expanded(
+                  child: ActivityListView(
+                    client: client,
+                    feed: timelineFeed,
+                    onFollow: onFollow,
+                    onUnfollow: onUnfollow,
+                  ),
+                ),
+              ],
             )
           : ActivityListView(
               client: client,
@@ -119,12 +125,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> onFollow(FeedId value) async {
     await timelineFeed.follow(targetFid: value);
+    // Ensure the feeds are up to date after follow/unfollow
     await timelineFeed.getOrCreate();
     await exploreFeed.getOrCreate();
   }
 
   Future<void> onUnfollow(FeedId value) async {
     await timelineFeed.unfollow(targetFid: value);
+    // Ensure the feeds are up to date after follow/unfollow
     await timelineFeed.getOrCreate();
     await exploreFeed.getOrCreate();
   }

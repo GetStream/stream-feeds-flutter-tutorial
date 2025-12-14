@@ -21,8 +21,6 @@ class ActivityItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFollowing = activity.currentFeed?.ownFollows?.isNotEmpty ?? false;
-
     return Card(
       margin: EdgeInsets.all(8),
       child: Padding(
@@ -40,34 +38,12 @@ class ActivityItem extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          activity.user.name ?? '',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-                      if (!isFollowing && activity.user.id != currentUserId)
-                        TextButton(
-                          onPressed: () => onFollow(activity.currentFeed!.fid),
-                          child: Text(
-                            'Follow',
-                            style: TextStyle(color: Colors.green),
-                          ),
-                        ),
-                      if (isFollowing && activity.user.id != currentUserId)
-                        TextButton(
-                          onPressed: () =>
-                              onUnfollow(activity.currentFeed!.fid),
-                          child: Text(
-                            'Unfollow',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                    ],
+                  ActivityHeader(
+                    currentUserId: currentUserId,
+                    activity: activity,
+                    onFollow: onFollow,
+                    onUnfollow: onUnfollow,
                   ),
                   Text(activity.text ?? ''),
                   ...activity.attachments
@@ -100,7 +76,9 @@ class ActivityItem extends StatelessWidget {
                       TextButton.icon(
                         onPressed: onLikePressed,
                         icon: Icon(Icons.favorite),
-                        label: Text(activity.reactionCount.toString()),
+                        label: Text(
+                          '${activity.reactionGroups["like"]?.count ?? 0}',
+                        ),
                         style: TextButton.styleFrom(
                           foregroundColor: activity.ownReactions.isEmpty
                               ? Colors.black54
@@ -115,6 +93,47 @@ class ActivityItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ActivityHeader extends StatelessWidget {
+  const ActivityHeader({
+    super.key,
+    required this.currentUserId,
+    required this.activity,
+    required this.onFollow,
+    required this.onUnfollow,
+  });
+
+  final String currentUserId;
+  final ActivityData activity;
+  final ValueSetter<FeedId> onFollow;
+  final ValueSetter<FeedId> onUnfollow;
+
+  @override
+  Widget build(BuildContext context) {
+    final isFollowing = activity.currentFeed?.ownFollows?.isNotEmpty ?? false;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            activity.user.name ?? '',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+        if (!isFollowing && activity.user.id != currentUserId)
+          TextButton(
+            onPressed: () => onFollow(activity.currentFeed!.fid),
+            child: Text('Follow', style: TextStyle(color: Colors.green)),
+          ),
+        if (isFollowing && activity.user.id != currentUserId)
+          TextButton(
+            onPressed: () => onUnfollow(activity.currentFeed!.fid),
+            child: Text('Unfollow', style: TextStyle(color: Colors.red)),
+          ),
+      ],
     );
   }
 }

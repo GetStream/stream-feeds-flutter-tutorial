@@ -504,10 +504,11 @@ packages:
   stream_feeds:
     dependency: "direct main"
     description:
-      path: "/Users/renefloor/Documents/github/stream-feeds-flutter/packages/stream_feeds"
-      relative: false
-    source: path
-    version: "0.4.0"
+      name: stream_feeds
+      sha256: "3ae1494be6b96195b7583b299fbe571117be6beafc71bffc2cb9caee44aa0b5e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   string_scanner:
     dependency: transitive
     description:
